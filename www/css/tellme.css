@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Roboto:wght@300;400;500;900&display=swap');
+
+:root{
+    --primary-color: #FFE347;
+    --bg-color: #2c3338;
+    --grey-color: #3b4148;
+    --light-grey-color: #606468;
+}
+
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/**
+Home page
+ */
+
+main.home-page {
+    display: flex;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: var(--grey-color);
+}
+
+.aside {
+    min-height: 100vh;
+    width: 25vw;
+    color: #FFFFFF;
+    background-color: var(--bg-color);
+}
+
+aside ul {
+    padding: 0;
+}
+
+aside ul li {
+    list-style: none;
+    width: 100%;
+    border-bottom: 1px solid white;
+}
+
+aside ul li:first-of-type {
+    list-style: none;
+    width: 100%;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+aside ul li div.infos {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0 1rem 2rem;
+}
+aside ul li div.infos .name {
+}
+
+aside ul li div.infos .link {
+    margin: -1rem 0 -1rem 0;
+    display: flex;
+    padding: 1rem;
+    align-items: center;
+    background-color: var(--primary-color);
+    text-decoration: none;
+}
+
+main.home-page section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 75vw;
+}
+
+main.home-page section h3, main.home-page section p {
+    color: #FFFFFF;
+}
+
+main.home-page section p {
+    width: 70%;
+}
+
+section form.room-form {
+    width: 70%;
+}
+
+form.room-form div.field {
+    display: flex;
+    width: 100%;
+}
+
+form.room-form div.field input {
+    background-color: white;
+    border: none;
+    padding: 1rem;
+    margin: .5rem 0;
+    font-size: 1rem;
+    color: var(--bg-color);
+    border-radius: 0 4px 4px 0;
+    width: 100%;
+}
+
+form.room-form div.field label {
+    width: 5%;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-color);
+    border-radius: 4px 0 0 4px;
+    color: var(--primary-color);
+    margin: .5rem 0;
+}
+
+form.room-form button {
+    width: 100%;
+    padding: 1rem;
+    margin: .5rem 0;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+.aside h1 {
+    text-align: center;
+    margin-top: 0;
+    padding-top: 2rem;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+/**
+Auth Pages
+ */
+main.auth-page h1 {
+    text-align: center;
+    margin-top: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+main.auth-page h2 {
+    text-align: center;
+    margin-top: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: #FFFFFF;
+    font-size: 2.5rem;
+}
+
+main.auth-page {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: var(--bg-color);
+}
+
+form.auth-form {
+    width: 60%;
+    min-width: 300px;
+}
+
+form.auth-form div.field {
+    display: flex;
+    width: 100%;
+}
+
+div.field input {
+    background-color: var(--grey-color);
+    border: none;
+    padding: 1rem;
+    margin: .5rem 0;
+    font-size: 1rem;
+    color: white;
+    border-radius: 0 4px 4px 0;
+    width: 80%;
+}
+
+div.field label {
+    width: 5%;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #363b41;
+    border-radius: 4px 0 0 4px;
+    color: #747474;
+    margin: .5rem 0;
+}
+
+form.auth-form button {
+    width: 100%;
+    padding: 1rem;
+    margin: .5rem 0;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+form.auth-form a {
+    display: block;
+    text-decoration: none;
+    color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: .85rem;
+    text-align: right;
+}
+
+form.auth-form a span {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: var(--primary-color);
+}

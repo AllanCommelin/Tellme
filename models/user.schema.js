@@ -9,15 +9,16 @@ Import
 /*
 Definition
 */
-    const MySchema = new Schema({
-        title: String,
-        content: String
+    const User = new Schema({
+        pseudo: String,
+        email: String,
+        password: String
     });
 //
 
 /*
 Export
 */
-    const MyModel = mongoose.model('post', MySchema);
+    const MyModel = mongoose.model('user', User);
     module.exports = MyModel;
 //

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/tellme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+    <title>Connexion | TellMe</title>
+</head>
+<body>
+    <main class="auth-page">
+        <section>
+            <h1>TellMe <i class="fab fa-telegram-plane"></i></h1>
+            <h2>Connexion</h2>
+            <form id="form" class="auth-form" action="/api/auth/login" method="post">
+                <div class="field">
+                    <label for="email"><i class="fas fa-user"></i></label>
+                    <input type="email" name="email" id="email" placeholder="Adresse email">
+                </div>
+                <div class="field">
+                    <label for="password"><i class="fas fa-lock"></i></label>
+                    <input type="password" name="password" id="password" placeholder="Mot de passe">
+                </div>
+                <button type="submit">Se connecter</button>
+                <a href="/register">Pas encore de compte ? <span>S'inscrire</span></a>
+            </form>
+        </section>
+    </main>
+    <script>
+        let loginForm = document.getElementById('form');
+        let email = document.getElementById('email');
+        let password = document.getElementById('password');
+
+        window.addEventListener("DOMContentLoaded", (event) => {
+            if(localStorage.getItem('userId')){
+                window.location.replace("/");
+            }
+
+            loginForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if(email.value && password.value) {
+                    fetch("/api/auth/login", {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            email: email.value,
+                            password: password.value
+                        })
+                    }).then(response => {
+                        return response.json()
+                    }).then(jsonData => {
+                        // Je ne set pas le password pour le principe, ici l'ID jouera le rôle du token
+                        localStorage.setItem("userId",jsonData.data._id)
+                        localStorage.setItem("userEmail",jsonData.data.email)
+                        window.location.replace("/");
+                    })
+                    .catch(err => console.log('err', err))
+                } else {
+                    console.log('TODO : Gerer les erreurs de formulaires')
+                }
+
+            })
+        });
+    </script>
+</body>
+</html>

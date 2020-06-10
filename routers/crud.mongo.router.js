@@ -6,8 +6,7 @@ Imports
     const router = express.Router();
 
     // Inner
-    const PostModel = require('../models/post.schema');
-    const CommentModel = require('../models/comment.schema');
+    const MessageModel = require('../models/message.schema');
 //
 
 /*
@@ -20,7 +19,6 @@ Routes definition
         
         // Set route fonctions
         routes(){
-
             /* 
             CRUD: Create route 
             */
@@ -47,7 +45,7 @@ Routes definition
             CRUD: Read all route 
             */
                 router.get('/:endpoint', (req, res) => {
-                    PostModel.find()
+                    MessageModel.find()
                     .then( documents => res.status(200).json({
                         method: 'GET',
                         route: `/api/${req.params.endpoint}`,
@@ -69,7 +67,7 @@ Routes definition
             CRUD: Read one route
             */
                 router.get('/:endpoint/:id', (req, res) => {
-                    PostModel.findById(req.params.id)
+                    MessageModel.findById(req.params.id)
                     .then( document => res.status(200).json({
                         method: 'GET',
                         route: `/api/${req.params.endpoint}/${req.params.id}`,
@@ -91,7 +89,7 @@ Routes definition
             CRUD: Update route 
             */
                 router.put('/:endpoint/:id', (req, res) => {
-                    PostModel.findById(req.params.id)
+                    MessageModel.findById(req.params.id)
                     .then( document => {
                         // Update document
                         document.title = req.body.title;
@@ -128,7 +126,7 @@ Routes definition
             CRUD: Delete route 
             */
                 router.delete('/:endpoint/:id', (req, res) => {
-                    PostModel.findOneAndDelete({ _id: req.params.id })
+                    MessageModel.findOneAndDelete({ _id: req.params.id })
                     .then( deletedDocument => res.status(200).json({
                             method: 'PUT',
                             route: `/api/${req.params.endpoint}/${req.params.id}`,
@@ -155,7 +153,7 @@ Routes definition
             // Sendback router
             return router;
         };
-    };
+    }
 //
 
 /*
