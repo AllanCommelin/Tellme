@@ -12,7 +12,7 @@ Definition
     const Message = new Schema({
         message: String,
         user: Schema.Types.ObjectId,
-        room: Schema.Types.ObjectId,
+        room: String,
     });
 //
 

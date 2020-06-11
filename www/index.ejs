@@ -6,42 +6,17 @@
         <link rel="stylesheet" href="./css/tellme.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
         <title>TellMe</title>
+        <script src="./js/main.js"></script>
     </head>
     <body>
         <main class="page">
-            <aside class="aside">
-                <h1>TellMe <i class="fab fa-telegram-plane"></i></h1>
-                <ul id="room-container">
-                    <% if(Object.keys(rooms).length > 0) {%>
-                        <% Object.keys(rooms).forEach(room => { %>
-                            <li class="chat-room">
-                                <div class="infos">
-                                    <span class="name"><%= room %></span>
-                                    <a class="link" href="/<%= room %>">Rejoindre</a>
-                                </div>
-                            </li>
-                        <% }) %>
-                    <% } else {%>
-                        <li class="chat-room">
-                            <div class="infos">
-                                <span class="name">Aucune conversation !</span>
-                            </div>
-                        </li>
-                    <% }%>
-                    <li class="chat-room --logout">
-                        <div class="logout">
-                            <span class="name" id="logout">Deconnexion</span>
-                        </div>
-                    </li>
-                </ul>
-            </aside>
+            <%- include('components/side-bar.ejs', {rooms: rooms}); -%>
             <section>
                 <h3>Créer de nouvelle conversation !</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem deserunt inventore molestias quo quos? Adipisci doloremque fugiat ipsam iure natus, nemo perferendis praesentium reprehenderit rerum soluta sunt vel vitae voluptas.</p>
                 <form id="room-form" class="room-form" action="/room" method="POST">
                     <div class="field">
                         <label for="room"><i class="fas fa-comments"></i></label>
-                        <input type="text" value="">
                         <input id="room" name="room" type="text" required placeholder="Nom de la nouvelle room">
                     </div>
                     <button type="submit">Créer une nouvelle conversation</button>
@@ -50,7 +25,6 @@
         </main>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
         <script src="./js/chat.js"></script>
-        <script src="./js/app.js"></script>
         <script>
             window.addEventListener("DOMContentLoaded", (event) => {
                 const logoutBtn = document.getElementById('logout');

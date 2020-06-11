@@ -11,6 +11,8 @@ Imports
     const cookieParser = require('cookie-parser'); //=> https://www.npmjs.com/package/cookie-parser
     const ejs = require('ejs'); //=> https://www.npmjs.com/package/ejs
     const path = require('path'); //=> https://www.npmjs.com/package/path
+    const passport = require('passport'); //=> https://www.npmjs.com/package/passport
+
     /*
     Mongo Schemas
      */
@@ -20,7 +22,10 @@ Imports
     const RoomModel = require('./models/room.schema');
 
     const port = process.env.PORT;
-    const rooms = { };
+    const secretKey = process.env.SECRET_TOKEN;
+    const ObjectId = require('mongoose').Types.ObjectId;
+
+    let rooms = { };
 
 /*
 Server class
@@ -29,6 +34,7 @@ Server class
         constructor(){
             // Instanciate MongoDB
             this.MONGO = new MONGOclass;
+            this.passport = passport;
         }
 
         init(){
@@ -55,9 +61,13 @@ Server class
             // Connect the DB
             this.MONGO.connectDb()
                 .then(connection => {
+                    // Authentication
+                    const { setAuthentication } = require('./services/auth.service');
+                    setAuthentication(passport);
+
                     // Set Auth router
                     const AuthRouterClass = require('./routers/auth.router');
-                    const AuthRouter = new AuthRouterClass();
+                    const AuthRouter = new AuthRouterClass({passport});
                     server.use('/api/auth', AuthRouter.init());
 
                     // Set Mongo router
@@ -88,24 +98,38 @@ Server class
 
         chat() {
             server.get('/', (req, res) => {
-                res.render('index', { rooms: rooms })
+                RoomModel.find().then( documents => {
+                    rooms = { };
+                    documents.forEach( room => {
+                        rooms[room.name] = { _id: room._id, users: {} }
+                    })
+                    res.render('index', { rooms: rooms});
+                });
             });
 
-            server.post('/room', (req, res) => {
+            server.post('/room', this.passport.authenticate('jwt', { session: false }), (req, res) => {
                 if (rooms[req.body.room] != null) {
                     return res.redirect('/')
                 }
-                rooms[req.body.room] = { users: {} };
-                res.redirect(req.body.room);
-                // Send message that new room was created
-                io.emit('room-created', req.body.room)
+                RoomModel.create({
+                    'name': req.body.room,
+                    'owner': req.user._id,
+                }).then( document => {
+                    rooms[req.body.room] = { users: {} };
+                    res.redirect(`${document.name}/${document._id}`);
+                    // Envoi un message pour dire que la room à été créée
+                    io.emit('room-created', document.name, document._id)
+                });
             });
 
-            server.get('/:room', (req, res) => {
+            server.get('/:room/:id', (req, res) => {
                 if (rooms[req.params.room] == null) {
                     return res.redirect('/')
                 }
-                res.render('room', { roomName: req.params.room, rooms: rooms })
+                MessageModel.find({room: req.params.id}).then(messages => {
+                    console.log('Meessssages', messages)
+                    res.render('room', { roomName: req.params.room, rooms: rooms, messages: messages })
+                })
             });
 
             app.listen(3000);
@@ -116,9 +140,9 @@ Server class
                     rooms[room].users[socket.id] = name;
                     socket.to(room).broadcast.emit('user-connected', name)
                 });
-                socket.on('send-chat-message', (room, message) => {
+                socket.on('send-chat-message', (room, message, userId) => {
                     socket.to(room).broadcast.emit('chat-message', { message: message, name: rooms[room].users[socket.id] });
-                    MessageModel.create({ message: message, name: rooms[room].users[socket.id] })
+                    MessageModel.create({ message: message, room: rooms[room]._id, user: userId})
                         .then( document => {
                             console.log('Message created', document)
                         })
@@ -151,7 +175,6 @@ Server class
                     console.log({
                         node: `http://localhost:${port}`,
                         mongo: db.url,
-                        mysql: `mysql://${process.env.MYSQL_HOST}:${process.env.MYSQL_PORT}`
                     });
                 });
             })

@@ -5,50 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><%= roomName %> | TellMe</title>
+    <script src="/js/main.js"></script>
     <script>
         const roomName = "<%= roomName %>"
     </script>
-    <link rel="stylesheet" href="./css/tellme.css">
+    <link rel="stylesheet" href="/css/tellme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
-    <script defer src="./js/chat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/chat.js"></script>
 </head>
 <body>
     <main class="page">
-        <aside class="aside">
-            <h1>TellMe <i class="fab fa-telegram-plane"></i></h1>
-            <ul id="room-container">
-                <li class="chat-room --left-room">
-                    <a class="left" href="/">
-                        <i class="fas fa-angle-left"></i>
-                        Retour à l'accueil
-                    </a>
-                </li>
-                <% if(Object.keys(rooms).length > 0) {%>
-                    <% Object.keys(rooms).forEach(room => { %>
-                        <li class="chat-room">
-                            <div class="infos">
-                                <span class="name"><%= room %></span>
-                                <a class="link" href="/<%= room %>">Rejoindre</a>
-                            </div>
-                        </li>
-                    <% }) %>
-                <% } else {%>
-                    <li class="chat-room">
-                        <div class="infos">
-                            <span class="name">Aucun chat room !</span>
-                        </div>
-                    </li>
-                <% }%>
-                <li class="chat-room --logout">
-                    <div class="logout">
-                        <span class="name" id="logout">Deconnexion</span>
-                    </div>
-                </li>
-            </ul>
-        </aside>
+        <%- include('components/side-bar.ejs', {rooms: rooms}); -%>
         <section class="room-chat-container">
-            <div id="message-container"></div>
+            <div id="message-container">
+                <% messages.forEach(message => { %>
+                    <span><%= message.message %></span>
+                <% }) %>
+            </div>
             <form id="send-container">
                 <label for="message-input" hidden>Message</label>
                 <input name="message" type="text" id="message-input">

@@ -33,11 +33,15 @@
         let email = document.getElementById('email');
         let password = document.getElementById('password');
 
-        window.addEventListener("DOMContentLoaded", (event) => {
-            if(localStorage.getItem('userId')){
-                window.location.replace("/");
+        fetch('/api/auth/me').then( apiResponse => {
+            // Vérifier le status de la requête
+            if( apiResponse.ok ){
+                // Redirige vers la home
+                window.location.replace('/')
             }
+        })
 
+        window.addEventListener("DOMContentLoaded", (event) => {
             loginForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 if(email.value && password.value) {
@@ -51,10 +55,6 @@
                     }).then(response => {
                         return response.json()
                     }).then(jsonData => {
-                        // Je ne set pas le password pour le principe, ici l'ID jouera le rôle du token
-                        localStorage.setItem("userId",jsonData.data._id)
-                        localStorage.setItem("userEmail",jsonData.data.email)
-                        localStorage.setItem("userName",jsonData.data.pseudo)
                         window.location.replace("/");
                     })
                     .catch(err => console.log('err', err))

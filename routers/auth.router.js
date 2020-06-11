@@ -5,8 +5,10 @@ Imports
     const express = require('express');
     const bcrypt = require('bcrypt');
     const router = express.Router();
+    const secretKey = process.env.SECRET_TOKEN;
 
-    // Inner
+
+// Inner
     const UserModel = require('../models/user.schema');
 //
 
@@ -16,7 +18,9 @@ Routes definition
     class AuthRouterClass {
 
         // Inject Passport to secure routes
-        constructor() {}
+        constructor({passport}) {
+            this.passport = passport
+        }
         
         // Set route fonctions
         routes(){
@@ -54,13 +58,15 @@ Routes definition
                     .then( async (user) => {
                         try {
                             if(await bcrypt.compare(req.body.password, user.password)) {
+                                // Generate user JWT
+                                res.cookie(process.env.COOKIE_NAME, user.generateJwt(user));
                                 res.status(201).json({
                                     method: 'POST',
                                     route: '/api/auth/login',
                                     data: user,
                                     error: null,
                                     status: 201
-                                })
+                                });
                             } else {
                                 res.status(405).json({
                                     method: 'POST',
@@ -89,6 +95,29 @@ Routes definition
                             status: 404
                         });
                     });
+            });
+
+            router.get('/me', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+                res.status(201).json({
+                    method: 'POST',
+                    route: '/api/auth/me',
+                    data: req.user,
+                    error: null,
+                    status: 201
+                });
+            });
+
+            router.get('/logout', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+                // Delete cookie
+                res.clearCookie(process.env.COOKIE_NAME);
+                res.cookie(process.env.COOKIE_NAME).set({expires: Date.now()})
+                res.status(201).json({
+                    method: 'POST',
+                    route: '/api/auth/logout',
+                    data: null,
+                    error: null,
+                    status: 201
+                });
             });
         };
 

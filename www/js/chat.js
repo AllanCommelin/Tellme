@@ -1,39 +1,47 @@
 const socket = io('http://localhost:3000')
-const messageContainer = document.getElementById('message-container')
-const roomContainer = document.getElementById('room-container')
-const messageForm = document.getElementById('send-container')
-const messageInput = document.getElementById('message-input')
+
 
 window.addEventListener("DOMContentLoaded", (event) => {
+    const messageContainer = document.getElementById('message-container')
+    const roomContainer = document.getElementById('room-container')
+    const messageForm = document.getElementById('send-container')
+    const messageInput = document.getElementById('message-input')
     const logoutBtn = document.getElementById('logout');
+
     logoutBtn.addEventListener('click', function () {
-        window.localStorage.removeItem('userEmail');
-        window.localStorage.removeItem('userName');
-        window.localStorage.removeItem('userId');
+        fetch('/api/auth/logout', {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'}
+        }).then( apiResponse => {
+            // Vérifier le status de la requête
+            if( apiResponse.ok ){
+                // Extraire les données JSON de la réponse
+                window.location.replace("/login");
+            }
+
+        });
     })
 
-    // Si on n'est pas connecter, on redirige vers la page de connexion
-    if(!localStorage.getItem('userId')){
-        window.location.replace("/login");
-    }
-    const nameUser = localStorage.getItem('userName')
+    const userName = localStorage.getItem('userName')
+    const userId = localStorage.getItem('userId')
 
     if (messageForm != null) {
-        appendMessage(`${nameUser} a rejoint la conversation !`)
-        socket.emit('new-user', roomName, nameUser)
+        appendMessage(`${userName} a rejoint la conversation !`)
+        socket.emit('new-user', roomName, userName)
 
         messageForm.addEventListener('submit', e => {
             e.preventDefault()
             const message = messageInput.value
             appendMessage(`Moi: ${message}`)
-            socket.emit('send-chat-message', roomName, message)
+            socket.emit('send-chat-message', roomName, message, userId)
             messageInput.value = ''
         })
     }
     /**
      * Construit un nouvel item dans le menu quand une nouvelle conversation est créée
      */
-    socket.on('room-created', room => {
+    socket.on('room-created', (room, roomId) => {
+        console.log(roomId)
         const roomParentElement = document.createElement('li')
         roomParentElement.className += 'chat-room'
         const roomElement = document.createElement('div')
@@ -45,7 +53,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         roomInfos.innerText = room
         const roomLink = document.createElement('a')
         roomLink.className += 'link'
-        roomLink.href = `/${room}`
+        roomLink.href = `/${room}/${roomId}`
         roomLink.innerText = 'Rejoindre'
         roomContainer.append(roomParentElement)
         roomElement.append(roomLink)
