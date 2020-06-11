@@ -11,7 +11,8 @@ Definition
 */
     const Message = new Schema({
         message: String,
-        name: String
+        user: Schema.Types.ObjectId,
+        room: Schema.Types.ObjectId,
     });
 //
 

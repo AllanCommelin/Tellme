@@ -52,8 +52,6 @@ Routes definition
             router.post('/login', async (req, res) => {
                 UserModel.findOne({ email: req.body.email})
                     .then( async (user) => {
-                        console.log('User email:', user.email);
-                        console.log('User pass:', user.password);
                         try {
                             if(await bcrypt.compare(req.body.password, user.password)) {
                                 res.status(201).json({

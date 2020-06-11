@@ -11,8 +11,14 @@ Imports
     const cookieParser = require('cookie-parser'); //=> https://www.npmjs.com/package/cookie-parser
     const ejs = require('ejs'); //=> https://www.npmjs.com/package/ejs
     const path = require('path'); //=> https://www.npmjs.com/package/path
+    /*
+    Mongo Schemas
+     */
     const MONGOclass = require('./services/mongo.class');
     const MessageModel = require('./models/message.schema');
+    const UserModel = require('./models/user.schema');
+    const RoomModel = require('./models/room.schema');
+
     const port = process.env.PORT;
     const rooms = { };
 
@@ -76,7 +82,7 @@ Server class
         };
 
         user() {
-            server.get('/register', (req, res) => res.render('register'));
+            server.get('/register', (req, res) => res.render('auth/register'));
             server.get('/login', (req, res) => res.render('auth/login'));
         }
 
@@ -99,7 +105,7 @@ Server class
                 if (rooms[req.params.room] == null) {
                     return res.redirect('/')
                 }
-                res.render('room', { roomName: req.params.room })
+                res.render('room', { roomName: req.params.room, rooms: rooms })
             });
 
             app.listen(3000);

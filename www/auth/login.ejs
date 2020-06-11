@@ -54,6 +54,7 @@
                         // Je ne set pas le password pour le principe, ici l'ID jouera le rôle du token
                         localStorage.setItem("userId",jsonData.data._id)
                         localStorage.setItem("userEmail",jsonData.data.email)
+                        localStorage.setItem("userName",jsonData.data.pseudo)
                         window.location.replace("/");
                     })
                     .catch(err => console.log('err', err))

@@ -20,7 +20,7 @@ body {
 Home page
  */
 
-main.home-page {
+main.page {
     display: flex;
     min-height: 100vh;
     width: 100vw;
@@ -28,8 +28,11 @@ main.home-page {
 }
 
 .aside {
+    position: relative;
     min-height: 100vh;
     width: 25vw;
+    max-width: 330px;
+    min-width: 230px;
     color: #FFFFFF;
     background-color: var(--bg-color);
 }
@@ -41,14 +44,29 @@ aside ul {
 aside ul li {
     list-style: none;
     width: 100%;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.45);
 }
 
 aside ul li:first-of-type {
     list-style: none;
     width: 100%;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
+    border-top: 1px solid rgba(255, 255, 255, 0.45);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+aside ul li.--logout {
+    border: none;
+}
+
+aside ul li.--left-room {
+    display: flex;
+    padding: 1rem 0 1rem 0;
+}
+
+aside ul li.--left-room a.left {
+    color: white;
+    text-decoration: none;
+    padding-left: 1rem;
 }
 
 aside ul li div.infos {
@@ -56,19 +74,30 @@ aside ul li div.infos {
     justify-content: space-between;
     padding: 1rem 0 1rem 2rem;
 }
-aside ul li div.infos .name {
+
+aside ul li div.logout {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+}
+
+aside ul li div.logout .name {
+    color: var(--primary-color);
+    cursor: pointer;
 }
 
 aside ul li div.infos .link {
-    margin: -1rem 0 -1rem 0;
+    /* -1px pour compenser le  border de 1px */
+    margin: calc(-1rem - 1px) 0 calc(-1rem - 1px) 0;
     display: flex;
     padding: 1rem;
     align-items: center;
-    background-color: var(--primary-color);
+    color: var(--primary-color);
     text-decoration: none;
+    border: 1px solid var(--primary-color);
 }
 
-main.home-page section {
+main.page section {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -77,11 +106,11 @@ main.home-page section {
     width: 75vw;
 }
 
-main.home-page section h3, main.home-page section p {
+main.page section h3, main.page section p {
     color: #FFFFFF;
 }
 
-main.home-page section p {
+main.page section p {
     width: 70%;
 }
 
@@ -138,6 +167,35 @@ form.room-form button {
     font-family: 'Montserrat', sans-serif;
     color: var(--primary-color);
     font-size: 2rem;
+}
+
+/**
+Room page
+ */
+.room-chat-container {
+    justify-content: space-between !important;
+    width: 100% !important;
+    align-items: start !important;
+}
+
+#message-container {
+
+}
+#message-container div {
+    background-color: #CCC;
+    padding: 5px;
+}
+#message-container div:nth-child(2n) {
+    background-color: #FFF;
+}
+#send-container {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+}
+#message-input {
+    flex-grow: 1;
 }
 
 /**

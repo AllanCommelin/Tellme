@@ -4,49 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Chat App</title>
+    <title><%= roomName %> | TellMe</title>
     <script>
         const roomName = "<%= roomName %>"
     </script>
+    <link rel="stylesheet" href="./css/tellme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
     <script defer src="./js/chat.js"></script>
-    <style>
-        body {
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-        #message-container {
-            width: 80%;
-            max-width: 1200px;
-        }
-        #message-container div {
-            background-color: #CCC;
-            padding: 5px;
-        }
-        #message-container div:nth-child(2n) {
-            background-color: #FFF;
-        }
-        #send-container {
-            position: fixed;
-            padding-bottom: 30px;
-            bottom: 0;
-            background-color: white;
-            max-width: 1200px;
-            width: 80%;
-            display: flex;
-        }
-        #message-input {
-            flex-grow: 1;
-        }
-    </style>
 </head>
 <body>
-<div id="message-container"></div>
-<form id="send-container">
-    <input type="text" id="message-input">
-    <button type="submit" id="send-button">Send</button>
-</form>
+    <main class="page">
+        <aside class="aside">
+            <h1>TellMe <i class="fab fa-telegram-plane"></i></h1>
+            <ul id="room-container">
+                <li class="chat-room --left-room">
+                    <a class="left" href="/">
+                        <i class="fas fa-angle-left"></i>
+                        Retour à l'accueil
+                    </a>
+                </li>
+                <% if(Object.keys(rooms).length > 0) {%>
+                    <% Object.keys(rooms).forEach(room => { %>
+                        <li class="chat-room">
+                            <div class="infos">
+                                <span class="name"><%= room %></span>
+                                <a class="link" href="/<%= room %>">Rejoindre</a>
+                            </div>
+                        </li>
+                    <% }) %>
+                <% } else {%>
+                    <li class="chat-room">
+                        <div class="infos">
+                            <span class="name">Aucun chat room !</span>
+                        </div>
+                    </li>
+                <% }%>
+                <li class="chat-room --logout">
+                    <div class="logout">
+                        <span class="name" id="logout">Deconnexion</span>
+                    </div>
+                </li>
+            </ul>
+        </aside>
+        <section class="room-chat-container">
+            <div id="message-container"></div>
+            <form id="send-container">
+                <label for="message-input" hidden>Message</label>
+                <input name="message" type="text" id="message-input">
+                <button type="submit" id="send-button">Send</button>
+            </form>
+        </section>
+    </main>
 </body>
 </html>
