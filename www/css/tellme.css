@@ -178,16 +178,6 @@ Room page
     align-items: start !important;
 }
 
-#message-container {
-
-}
-#message-container div {
-    background-color: #CCC;
-    padding: 5px;
-}
-#message-container div:nth-child(2n) {
-    background-color: #FFF;
-}
 #send-container {
     position: relative;
     bottom: 0;
@@ -197,6 +187,76 @@ Room page
 #message-input {
     flex-grow: 1;
 }
+div#message-container {
+    width: 100%;
+}
+
+div#message-container div.message-user {
+    display: flex;
+    flex-direction: column;
+}
+
+div#message-container div.message-user.me {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+div#message-container  {
+    display: flex;
+    flex-direction: column;
+}
+
+div.user {
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+div.user.me {
+    text-align: end;
+}
+
+div.user span {
+    color: white;
+}
+
+div.message-user.me div.user span {
+    color: white;
+}
+
+div#message-container div.message {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    position: relative;
+    border-radius: 4px;
+    background-color: white;
+    padding: 1rem;
+    margin-top: 1rem;
+    width: fit-content;
+}
+
+div#message-container div.message.me {
+    background-color: var(--primary-color);
+}
+
+div#message-container div.message:after {
+    position: absolute;
+    content: ' ';
+    display: block;
+    width: 10px;
+    height: 10px;
+    top: -5px;
+    left: 10px;
+    background-color: white;
+    transform: rotate(45deg)
+}
+
+div#message-container div.message.me:after {
+    left: unset;
+    right: 10px;
+    background-color: var(--primary-color);
+}
+
 
 /**
 Auth Pages

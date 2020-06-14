@@ -22,8 +22,6 @@ Imports
     const RoomModel = require('./models/room.schema');
 
     const port = process.env.PORT;
-    const secretKey = process.env.SECRET_TOKEN;
-    const ObjectId = require('mongoose').Types.ObjectId;
 
     let rooms = { };
 
@@ -122,33 +120,34 @@ Server class
                 });
             });
 
-            server.get('/:room/:id', (req, res) => {
+            server.get('/:room/:id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
                 if (rooms[req.params.room] == null) {
                     return res.redirect('/')
                 }
                 MessageModel.find({room: req.params.id}).then(messages => {
-                    console.log('Meessssages', messages)
-                    res.render('room', { roomName: req.params.room, rooms: rooms, messages: messages })
+                    res.render('room', { roomName: req.params.room, rooms: rooms, user: req.user, messages: messages })
                 })
             });
 
             app.listen(3000);
 
             io.on('connection', socket => {
-                socket.on('new-user', (room, name) => {
+                socket.on('new-user', (room, name, userId) => {
                     socket.join(room);
                     rooms[room].users[socket.id] = name;
-                    socket.to(room).broadcast.emit('user-connected', name)
+                    socket.to(room).broadcast.emit('user-connected', name, userId)
                 });
                 socket.on('send-chat-message', (room, message, userId) => {
-                    socket.to(room).broadcast.emit('chat-message', { message: message, name: rooms[room].users[socket.id] });
-                    MessageModel.create({ message: message, room: rooms[room]._id, user: userId})
-                        .then( document => {
-                            console.log('Message created', document)
-                        })
-                        .catch( err => {
-                            console.log('Message don\'t created')
-                        });
+                    socket.to(room).broadcast.emit('chat-message', { message: message, name: rooms[room].users[socket.id], userId: userId });
+                    UserModel.findById(userId).then( user => {
+                        MessageModel.create({ message: message, room: rooms[room]._id, user: userId, userName: user.pseudo})
+                            .then( document => {
+                                console.log('Message created', document)
+                            })
+                            .catch( err => {
+                                console.log('Message don\'t created')
+                            });
+                    })
                 });
                 socket.on('disconnect', () => {
                     getUserRooms(socket).forEach(room => {

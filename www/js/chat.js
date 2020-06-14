@@ -27,12 +27,12 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     if (messageForm != null) {
         appendMessage(`${userName} a rejoint la conversation !`)
-        socket.emit('new-user', roomName, userName)
+        socket.emit('new-user', roomName, userName, userId)
 
         messageForm.addEventListener('submit', e => {
             e.preventDefault()
             const message = messageInput.value
-            appendMessage(`Moi: ${message}`)
+            appendMessage({message: message, name: userName}, userId, false)
             socket.emit('send-chat-message', roomName, message, userId)
             messageInput.value = ''
         })
@@ -60,24 +60,41 @@ window.addEventListener("DOMContentLoaded", (event) => {
     })
 
     socket.on('chat-message', data => {
-        appendMessage(`${data.name}: ${data.message}`)
+        appendMessage({message: data.message, name: data.name}, data.userId, false)
     })
 
-    socket.on('user-connected', name => {
-        appendMessage(`${name} a rejoint la conversation !`)
+    socket.on('user-connected', name, userId => {
+        appendMessage(`${name} a rejoint la conversation !`, userId, true)
     })
 
     socket.on('user-disconnected', name => {
-        appendMessage(`${name} a quitté la conversation !`)
+        appendMessage(`${name} a quitté la conversation !`, null, true)
     })
 
     /**
+     * TODO: Refaire deux fonction une pour les notif une pour les messages et revoir la structure des params  de la fonction des messages
      * Céer un element dans la conversation
      * @param message
+     * @param user_id
+     * @param notification
      */
-    function appendMessage(message) {
-        const messageElement = document.createElement('div')
-        messageElement.innerText = message
-        messageContainer.append(messageElement)
+    function appendMessage(message, user_id, notification = false) {
+        if(!notification) {
+            console.log(user_id == userId ? 'me' :'')
+            let newMessage = `
+                <div class="message-user ${user_id == userId ? 'me' :''}">
+                    <div class="user ${user_id == userId ? 'me' :''}">
+                        <span>${message.name}</span>
+                    </div>
+                    <div class="message  ${user_id == userId ? 'me' :''}">
+                        <span>${message.message}</span>
+                    </div>
+                </div>`
+            messageContainer.innerHTML += newMessage;
+        } else {
+            let newMessage = document.createElement('div')
+            newMessage.innerText = message
+            messageContainer.append(newMessage)
+        }
     }
 });

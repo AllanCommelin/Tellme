@@ -21,8 +21,16 @@
         <section class="room-chat-container">
             <div id="message-container">
                 <% messages.forEach(message => { %>
-                    <span><%= message.message %></span>
+                    <div class="message-user <%= user._id.equals(message.user) ? 'me' : '' %>">
+                        <div class="user <%= user._id.equals(message.user) ? 'me' : '' %>">
+                            <span><%= message.userName %></span>
+                        </div>
+                        <div class="message  <%= user._id.equals(message.user) ? 'me' : '' %>">
+                            <span><%= message.message %></span>
+                        </div>
+                    </div>
                 <% }) %>
+
             </div>
             <form id="send-container">
                 <label for="message-input" hidden>Message</label>
