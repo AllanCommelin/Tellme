@@ -1,32 +1,38 @@
-<aside class="aside">
-    <h1>TellMe <i class="fab fa-telegram-plane"></i></h1>
-    <ul id="room-container">
-        <li class="chat-room --left-room">
-            <a class="left" href="/">
-                <i class="fas fa-angle-left"></i>
-                Retour à l'accueil
-            </a>
-        </li>
-        <% if(Object.keys(rooms).length > 0) {%>
-            <% Object.keys(rooms).forEach(room => { %>
+<aside class="aside <%= open ? '--open' : '--close'%> " id="menu">
+    <div id="open-menu">
+        <i class="fas fa-times" id="btn-close-menu"></i>
+        <h1>TellMe <i class="fab fa-telegram-plane"></i></h1>
+        <ul id="room-container">
+            <li class="chat-room --left-room">
+                <a class="left" href="/">
+                    <i class="fas fa-angle-left"></i>
+                    Retour à l'accueil
+                </a>
+            </li>
+            <% if(Object.keys(rooms).length > 0) {%>
+                <% Object.keys(rooms).forEach(room => { %>
+                    <li class="chat-room">
+                        <div class="infos">
+                            <span class="name"><%= room %></span>
+                            <a class="link" href="/<%= room %>/<%= rooms[room]._id%>">Rejoindre</a>
+                        </div>
+                    </li>
+                <% }) %>
+            <% } else {%>
                 <li class="chat-room">
                     <div class="infos">
-                        <span class="name"><%= room %></span>
-                        <a class="link" href="/<%= room %>/<%= rooms[room]._id%>">Rejoindre</a>
+                        <span class="name">Aucune conversation !</span>
                     </div>
                 </li>
-            <% }) %>
-        <% } else {%>
-            <li class="chat-room">
-                <div class="infos">
-                    <span class="name">Aucune conversation !</span>
+            <% }%>
+            <li class="chat-room --logout">
+                <div class="logout">
+                    <span class="name" id="logout">Deconnexion</span>
                 </div>
             </li>
-        <% }%>
-        <li class="chat-room --logout">
-            <div class="logout">
-                <span class="name" id="logout">Deconnexion</span>
-            </div>
-        </li>
-    </ul>
+        </ul>
+    </div>
+    <div id="close-menu" style="display: none">
+        <i class="fas fa-bars" id="btn-open-menu"></i>
+    </div>
 </aside>

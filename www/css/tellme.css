@@ -30,11 +30,50 @@ main.page {
 .aside {
     position: relative;
     min-height: 100vh;
-    width: 25vw;
-    max-width: 330px;
-    min-width: 230px;
     color: #FFFFFF;
     background-color: var(--bg-color);
+    transition: transform .4s cubic-bezier(.25, .1, .25, 1);
+}
+
+#menu.--close {
+    width: 106px;
+}
+
+#menu.--open {
+    width: 330px !important;
+}
+
+#btn-close-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+#close-menu {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+#menu.--open #open-menu {
+    display: block !important;
+}
+
+#menu.--close #open-menu {
+    display: none !important;
+}
+
+#menu.--open #close-menu {
+    display: none !important;
+}
+
+#menu.--close #close-menu {
+    display: flex !important;
+}
+
+#close-menu {
+    font-size: 2rem;
 }
 
 aside ul {
@@ -66,7 +105,7 @@ aside ul li.--left-room {
 aside ul li.--left-room a.left {
     color: white;
     text-decoration: none;
-    padding-left: 1rem;
+    padding-left: 1.5rem;
 }
 
 aside ul li div.infos {
@@ -103,7 +142,7 @@ main.page section {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    width: 75vw;
+    width: fit-content;
 }
 
 main.page section h3, main.page section p {
@@ -163,100 +202,15 @@ form.room-form button {
 .aside h1 {
     text-align: center;
     margin-top: 0;
-    padding-top: 2rem;
+    padding-top: 4rem;
     font-family: 'Montserrat', sans-serif;
     color: var(--primary-color);
     font-size: 2rem;
 }
 
-/**
-Room page
- */
-.room-chat-container {
-    justify-content: space-between !important;
-    width: 100% !important;
-    align-items: start !important;
-}
-
-#send-container {
-    position: relative;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-}
-#message-input {
-    flex-grow: 1;
-}
-div#message-container {
-    width: 100%;
-}
-
-div#message-container div.message-user {
-    display: flex;
-    flex-direction: column;
-}
-
-div#message-container div.message-user.me {
-    display: flex;
-    align-items: flex-end;
-    flex-direction: column;
-}
-
-div#message-container  {
-    display: flex;
-    flex-direction: column;
-}
-
-div.user {
-    margin-left: 2rem;
-    margin-right: 2rem;
-}
-
-div.user.me {
-    text-align: end;
-}
-
-div.user span {
-    color: white;
-}
-
-div.message-user.me div.user span {
-    color: white;
-}
-
-div#message-container div.message {
-    margin-left: 2rem;
-    margin-right: 2rem;
-    position: relative;
-    border-radius: 4px;
-    background-color: white;
-    padding: 1rem;
-    margin-top: 1rem;
-    width: fit-content;
-}
-
-div#message-container div.message.me {
-    background-color: var(--primary-color);
-}
-
-div#message-container div.message:after {
-    position: absolute;
-    content: ' ';
-    display: block;
-    width: 10px;
-    height: 10px;
-    top: -5px;
-    left: 10px;
-    background-color: white;
-    transform: rotate(45deg)
-}
-
-div#message-container div.message.me:after {
-    left: unset;
-    right: 10px;
-    background-color: var(--primary-color);
-}
-
+/*#close-menu {*/
+/*    display: none;*/
+/*}*/
 
 /**
 Auth Pages
@@ -348,4 +302,182 @@ form.auth-form a span {
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     color: var(--primary-color);
+}
+
+/**
+Room page
+ */
+body.room {
+    overflow: hidden;
+}
+
+.room-chat-container {
+    justify-content: space-between !important;
+    width: fit-content !important;
+    align-items: start !important;
+}
+
+#send-container {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    height: 6vh;
+}
+
+#message-input {
+    flex-grow: 1;
+    margin: .5rem 0 .5rem 2rem;
+    position: relative;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--bg-color);
+    padding: 1rem;
+    width: fit-content;
+    color: white;
+}
+
+#message-input:focus {
+    border:none;
+    outline: none;
+}
+
+#send-button {
+    margin: .5rem 2rem .5rem .5rem;
+    position: relative;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    font-weight: 500;
+}
+
+div#message-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: scroll;
+    height: 94vh;
+}
+div#message-container::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: var(--bg-color);
+}
+
+div#message-container::-webkit-scrollbar
+{
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+div#message-container::-webkit-scrollbar-thumb
+{
+    background-color: var(--grey-color);
+    border: 2px solid var(--grey-color);
+}
+
+div#message-container div.message-user {
+    display: flex;
+    flex-direction: column;
+    margin: .5rem 0;
+}
+
+div#message-container div.message-user.me {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+div#message-container div.notification {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    margin: .5rem 0;
+}
+
+div#message-container div.info-notif {
+    text-align: center;
+}
+
+div#message-container div.divider {
+    background-color: white;
+    width: 20%;
+    height: 2px;
+    margin: 0 1rem;
+}
+
+div.user {
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+div.user.me {
+    text-align: end;
+}
+
+div.user span {
+    color: white;
+}
+
+div.message-user.me div.user span {
+    color: white;
+}
+
+div#message-container div.message {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    position: relative;
+    border-radius: 4px;
+    background-color: white;
+    padding: 1rem;
+    margin-top: 1rem;
+    width: fit-content;
+}
+
+div#message-container div.message.me {
+    background-color: var(--primary-color);
+}
+
+div#message-container div.message:after {
+    position: absolute;
+    content: ' ';
+    display: block;
+    width: 10px;
+    height: 10px;
+    top: -5px;
+    left: 10px;
+    background-color: white;
+    transform: rotate(45deg)
+}
+
+div#message-container div.message.me:after {
+    left: unset;
+    right: 10px;
+    background-color: var(--primary-color);
+}
+
+.right-bar {
+    display: none;
+}
+
+@media (min-width: 1550px) {
+    .right-bar {
+        display: block;
+        width: 15%;
+        background-color: var(--bg-color);
+    }
+}
+
+@media (max-width: 764px) {
+    #menu.--open {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw !important;
+        z-index: 1000;
+    }
 }

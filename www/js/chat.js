@@ -26,13 +26,13 @@ window.addEventListener("DOMContentLoaded", (event) => {
     const userId = localStorage.getItem('userId')
 
     if (messageForm != null) {
-        appendMessage(`${userName} a rejoint la conversation !`)
+        appendNotification(`${userName} a rejoint la conversation !`)
         socket.emit('new-user', roomName, userName, userId)
 
         messageForm.addEventListener('submit', e => {
             e.preventDefault()
             const message = messageInput.value
-            appendMessage({message: message, name: userName}, userId, false)
+            appendMessage({message: message, name: userName, user_id: userId})
             socket.emit('send-chat-message', roomName, message, userId)
             messageInput.value = ''
         })
@@ -41,7 +41,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
      * Construit un nouvel item dans le menu quand une nouvelle conversation est créée
      */
     socket.on('room-created', (room, roomId) => {
-        console.log(roomId)
         const roomParentElement = document.createElement('li')
         roomParentElement.className += 'chat-room'
         const roomElement = document.createElement('div')
@@ -60,41 +59,53 @@ window.addEventListener("DOMContentLoaded", (event) => {
     })
 
     socket.on('chat-message', data => {
-        appendMessage({message: data.message, name: data.name}, data.userId, false)
+        appendMessage({message: data.message, name: data.name, user_id: data.userId})
     })
 
-    socket.on('user-connected', name, userId => {
-        appendMessage(`${name} a rejoint la conversation !`, userId, true)
+    socket.on('user-connected', name => {
+        appendNotification(`${name} a rejoint la conversation !`)
     })
 
     socket.on('user-disconnected', name => {
-        appendMessage(`${name} a quitté la conversation !`, null, true)
+        appendNotification(`${name} a quitté la conversation !`)
     })
 
     /**
-     * TODO: Refaire deux fonction une pour les notif une pour les messages et revoir la structure des params  de la fonction des messages
-     * Céer un element dans la conversation
-     * @param message
-     * @param user_id
-     * @param notification
+     * Affiche un message dans la conversation
+     * @param data
      */
-    function appendMessage(message, user_id, notification = false) {
-        if(!notification) {
-            console.log(user_id == userId ? 'me' :'')
-            let newMessage = `
-                <div class="message-user ${user_id == userId ? 'me' :''}">
-                    <div class="user ${user_id == userId ? 'me' :''}">
-                        <span>${message.name}</span>
-                    </div>
-                    <div class="message  ${user_id == userId ? 'me' :''}">
-                        <span>${message.message}</span>
-                    </div>
-                </div>`
-            messageContainer.innerHTML += newMessage;
-        } else {
-            let newMessage = document.createElement('div')
-            newMessage.innerText = message
-            messageContainer.append(newMessage)
-        }
+    function appendMessage(data) {
+        let newMessage = `
+            <div class="message-user ${data.user_id == userId ? 'me' :''}">
+                <div class="user ${data.user_id == userId ? 'me' :''}">
+                    <span>${data.name}</span>
+                </div>
+                <div class="message  ${data.user_id == userId ? 'me' :''}">
+                    <span>${data.message}</span>
+                </div>
+            </div>`
+        messageContainer.innerHTML += newMessage;
+        scroollToBottom(messageContainer.lastElementChild)
+    }
+
+    /**
+     * Affiche une notification
+     * @param message
+     */
+    function appendNotification(message) {
+        let newMessage = `
+            <div class="notification">
+                <div class="divider"></div>
+                <div class="info-notif">${message}</div>
+                <div class="divider"></div>
+            </div>
+        `
+        messageContainer.innerHTML += newMessage
+        scroollToBottom(messageContainer.lastElementChild)
+    }
+
+    function scroollToBottom(element)
+    {
+        element.scrollIntoView({ behavior: 'smooth', block: 'end'})
     }
 });
