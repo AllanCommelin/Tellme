@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Roboto:wght@300;400;500;900&display=swap');
 
 :root{
-    --primary-color: #FFE347;
+    --primary-color: #ffe347;
     --bg-color: #2c3338;
     --grey-color: #3b4148;
     --light-grey-color: #606468;
@@ -118,11 +118,20 @@ aside ul li div.logout {
     position: absolute;
     bottom: 1rem;
     left: 1rem;
+    display: flex;
+    justify-content: space-between;
+    right: 1rem;
 }
 
 aside ul li div.logout .name {
     color: var(--primary-color);
     cursor: pointer;
+}
+
+aside ul li div.logout .name a {
+    color: var(--primary-color);
+    cursor: pointer;
+    text-decoration: none;
 }
 
 aside ul li div.infos .link {
@@ -136,6 +145,21 @@ aside ul li div.infos .link {
     border: 1px solid var(--primary-color);
 }
 
+aside ul li div.infos .delete-room{
+    margin: calc(-1rem - 1px) 0 calc(-1rem - 1px) 0;
+    display: flex;
+    padding: 1rem;
+    align-items: center;
+    background-color: transparent;
+    color: rgba(252, 69, 69, 0.8);
+    text-decoration: none;
+    border: 1px solid rgba(252, 69, 69, 0.8)
+}
+
+aside ul li div.infos .actions{
+    display: flex;
+}
+
 main.page section {
     display: flex;
     flex-direction: column;
@@ -143,6 +167,7 @@ main.page section {
     align-items: center;
     min-height: 100vh;
     width: fit-content;
+    min-width: calc(100% - 330px);
 }
 
 main.page section h3, main.page section p {
@@ -315,6 +340,7 @@ body.room {
     justify-content: space-between !important;
     width: fit-content !important;
     align-items: start !important;
+    min-width: calc(100% - 330px);
 }
 
 #send-container {
@@ -460,6 +486,29 @@ div#message-container div.message.me:after {
 
 .right-bar {
     display: none;
+}
+
+.alert-notif {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.alert-notif.--success span {
+    padding: 1rem;
+    background-color: rgba(69, 252, 93, 0.8);
+    color: black;
+    border-radius: 4px;
+}
+
+.alert-notif.--error span {
+    padding: 1rem;
+    background-color: rgba(252, 69, 69, 0.8);
+    color: white;
+    border-radius: 4px;
 }
 
 @media (min-width: 1550px) {

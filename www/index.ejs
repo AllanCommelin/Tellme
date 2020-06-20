@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,7 @@
     </head>
     <body>
         <main class="page">
-            <%- include('components/side-bar.ejs', {rooms: rooms, open: false}); -%>
+            <%- include('components/side-bar.ejs', {rooms: rooms, open: false, me: me}); -%>
             <section>
                 <h3>Créer de nouvelle conversation !</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem deserunt inventore molestias quo quos? Adipisci doloremque fugiat ipsam iure natus, nemo perferendis praesentium reprehenderit rerum soluta sunt vel vitae voluptas.</p>

@@ -11,10 +11,17 @@
             </li>
             <% if(Object.keys(rooms).length > 0) {%>
                 <% Object.keys(rooms).forEach(room => { %>
-                    <li class="chat-room">
+                    <li class="chat-room" id="li-<%= rooms[room]._id%>">
                         <div class="infos">
                             <span class="name"><%= room %></span>
-                            <a class="link" href="/<%= room %>/<%= rooms[room]._id%>">Rejoindre</a>
+                            <div class="actions">
+                                <% if(rooms[room].hasOwnProperty('owner') && rooms[room].owner.equals(me._id)) { %>
+                                    <button class="delete-room" data-name="<%= room %>" data-id="<%= rooms[room]._id%>">
+                                        <i class="far fa-trash-alt"></i>
+                                    </button>
+                                <% } %>
+                                <a class="link" href="/<%= room %>/<%= rooms[room]._id%>">Rejoindre</a>
+                            </div>
                         </div>
                     </li>
                 <% }) %>
@@ -27,7 +34,8 @@
             <% }%>
             <li class="chat-room --logout">
                 <div class="logout">
-                    <span class="name" id="logout">Deconnexion</span>
+                    <div class="name" id="user"><a href="/user">Mon profil</a></div>
+                    <div class="name" id="logout">Deconnexion</div>
                 </div>
             </li>
         </ul>

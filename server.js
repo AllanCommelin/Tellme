@@ -92,16 +92,39 @@ Server class
         user() {
             server.get('/register', (req, res) => res.render('auth/register'));
             server.get('/login', (req, res) => res.render('auth/login'));
-        }
-
-        chat() {
-            server.get('/', (req, res) => {
+            server.get('/user', this.passport.authenticate('jwt', { session: false }), (req, res) => {
                 RoomModel.find().then( documents => {
                     rooms = { };
                     documents.forEach( room => {
-                        rooms[room.name] = { _id: room._id, users: {} }
+                        rooms[room.name] = { _id: room._id, users: {}, owner: room.owner }
                     })
-                    res.render('index', { rooms: rooms});
+                    res.render('profile', { rooms: rooms, me: req.user})
+                });
+            });
+            server.post('/user', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+                UserModel.findById(req.body._id)
+                    .then( document => {
+                        // Update document
+                        document.pseudo = req.body.pseudo;
+                        document.email = req.body.email;
+                        // Save document
+                        document.save()
+                        res.redirect('/login')
+                    })
+                    .catch( err => {
+                        res.redirect('/user', { rooms: rooms, me: document , notif: {type: error, message: err}})
+                    });
+            });
+        }
+
+        chat() {
+            server.get('/', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+                RoomModel.find().then( documents => {
+                    rooms = { };
+                    documents.forEach( room => {
+                        rooms[room.name] = { _id: room._id, users: {}, owner: room.owner }
+                    })
+                    res.render('index', { rooms: rooms, me: req.user});
                 });
             });
 
@@ -127,6 +150,29 @@ Server class
                 MessageModel.find({room: req.params.id}).then(messages => {
                     res.render('room', { roomName: req.params.room, rooms: rooms, user: req.user, messages: messages })
                 })
+            });
+
+            server.delete('/:room/:id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+                if (rooms[req.params.room] == null) {
+                    return res.redirect('/')
+                }
+                RoomModel.findOneAndDelete({ _id: req.params.id })
+                    .then( deletedDocument => {
+                        res.status(200).json({
+                            method: 'DELETE',
+                            route: `/${req.params.endpoint}/${req.params.id}`,
+                            data: deletedDocument,
+                            error: null,
+                            status: 200
+                        })
+                    })
+                    .catch( err => res.status(404).json({
+                        method: 'DELETE',
+                        route: `/${req.params.endpoint}/${req.params.id}`,
+                        data: null,
+                        error: err,
+                        status: 404
+                    }));
             });
 
             app.listen(3000);

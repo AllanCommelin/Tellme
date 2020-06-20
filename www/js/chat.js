@@ -15,6 +15,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
         }).then( apiResponse => {
             // Vérifier le status de la requête
             if( apiResponse.ok ){
+                window.localStorage.removeItem('userName');
+                window.localStorage.removeItem('userId');
                 // Extraire les données JSON de la réponse
                 window.location.replace("/login");
             }
