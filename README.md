@@ -1,3 +1,5 @@
+[À finaliser et à refacto]
+
 # Tellme
 Tellme est une plateforme permettant de chatter avec des personnes en ligne, vous avez la possibilité de vous créer un compte et de créer des conversations public.
 
